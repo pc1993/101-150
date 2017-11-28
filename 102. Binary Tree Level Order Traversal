@@ -1,0 +1,66 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    vector<vector<int>> res;
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        findtree(root,0);
+        return res;
+    }
+    void findtree(TreeNode* root,int depth)
+    {
+        if(root==0) return;
+        if(res.size()==depth)
+            res.push_back(vector<int> ());
+        res[depth].push_back(root->val);
+        findtree(root->left,depth+1);
+        findtree(root->right,depth+1);
+    }
+};
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        if(root==0)
+            return {};
+        vector<vector<int>> res;
+        vector<int> per;
+        queue<TreeNode*> q;
+        q.push(root);
+        int count=1;
+        while(!q.empty())
+        {
+            TreeNode* p=q.front();
+            if(p->left)
+                q.push(p->left);
+            if(p->right)
+                q.push(p->right);
+            per.push_back(p->val);
+            q.pop();
+            if(--count==0)
+            {
+                res.push_back(per);
+                per.clear();
+                count=q.size();
+            }
+        }
+        return res;
+    }
+};
