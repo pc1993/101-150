@@ -1,0 +1,74 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return findtree(preorder,0,preorder.size(),inorder,0,inorder.size());
+    }
+    TreeNode* findtree(vector<int>& preorder,int i,int n, vector<int>& inorder,int j,int m)
+    {
+        if(i>=n||j>=m)
+            return NULL;
+        int value=preorder[i];
+        int f=findidx(inorder,j,m,preorder[i]);
+        int dis=f-j;
+        TreeNode* root=new TreeNode(value);
+        root->left=findtree(preorder,i+1,i+1+dis,inorder,j,j+dis);
+        root->right=findtree(preorder,i+1+dis,n,inorder,dis+1+j,m);
+        return root;
+    }
+    int findidx(vector<int>& preorder,int start,int end,int val)
+    {
+        for(int i=start;i<=end;++i)
+        {
+            if(preorder[i]==val)
+                return i;
+        }
+        return -1;
+    }
+};
+
+
+
+
+
+非递归
+    public TreeNode buildTree2(int[] preorder, int[] inorder) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+        TreeNode root = null;
+        TreeNode p = root;
+        Stack<TreeNode> stack = new Stack<>();
+        for (int i = 0; i < preorder.length; i++) {
+            int temp = map.get(preorder[i]);
+            TreeNode node = new TreeNode(preorder[i]);
+            if (stack.isEmpty()) {
+                root = node;
+//              stack.add(node);
+                p = root;
+            } else {
+                if (temp < map.get(stack.peek().val)) {
+                    p.left = node;
+                    p = p.left;
+                } else {
+                    while (!stack.isEmpty() && temp > map.get(stack.peek().val)) {
+                        p = stack.pop();
+                    }
+                    p.right = node;
+                    p = p.right;
+                }
+            }
+            stack.add(node);
+        }
+
+        return root;
+    }
