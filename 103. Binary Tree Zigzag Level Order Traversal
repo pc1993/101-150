@@ -1,0 +1,78 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    vector<vector<int>> res;
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        findtree(root,0);
+        for(int i=1;i<res.size();i+=2)
+        {
+            reverse(res[i].begin(),res[i].end());
+        }
+        return res;
+    }
+    void findtree(TreeNode* root,int depth)
+    {
+        if(root==0) return;
+        if(depth==res.size())
+            res.push_back(vector<int> ());
+        res[depth].push_back(root->val);
+        findtree(root->left,depth+1);
+        findtree(root->right,depth+1);
+    }
+};
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        if(root==0) return{};
+        vector<vector<int>> res;
+        vector<int> per;
+        queue<TreeNode*> q;
+        q.push(root);
+        int count=1;
+        int flag=false;
+        while(!q.empty())
+        {
+            if(q.front()->left)
+                q.push(q.front()->left);
+            if(q.front()->right)
+                q.push(q.front()->right);
+            per.push_back(q.front()->val);
+            q.pop();
+            if(--count==0)
+            {
+                if(flag)
+                {
+                    reverse(per.begin(),per.end());
+                    flag=false;
+                }
+                else
+                {
+                    flag=true;
+                }
+                res.push_back(per);
+                per.clear();
+                count=q.size();
+            }
+        }
+        return res;
+    }
+};
