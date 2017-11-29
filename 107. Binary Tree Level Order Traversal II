@@ -1,0 +1,72 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        if(root==0)
+            return {};
+        vector<vector<int>> res;
+        vector<int> per;
+        queue<TreeNode*> q;
+        q.push(root);
+        int count=1;
+        while(!q.empty())
+        {
+            if(q.front()->left)
+            {
+                q.push(q.front()->left);
+            }
+            if(q.front()->right)
+            {
+                q.push(q.front()->right);
+            }
+            per.push_back(q.front()->val);
+            q.pop();
+            if(--count==0)
+            {
+                res.push_back(per);
+                per.clear();
+                count=q.size();
+            }
+        }
+        reverse(res.begin(),res.end());
+        return res;
+    }
+};
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    vector<vector<int>> res;
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        findtree(root,0);
+        reverse(res.begin(),res.end());
+        return res;
+    }
+    void findtree(TreeNode* root,int count)
+    {
+        if(root==0)
+            return;
+        if(count==res.size())
+            res.push_back(vector<int>());
+        res[count].push_back(root->val);
+        findtree(root->left,count+1);
+        findtree(root->right,count+1);
+    }
+};
