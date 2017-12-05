@@ -26,7 +26,7 @@ public:
 };
 
 
-
+insert插入方式，unorder_set其中没有相同的值，hash表的一种
 class Solution {
 public:
     int longestConsecutive(vector<int>& nums) {
