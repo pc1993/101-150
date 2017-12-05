@@ -1,0 +1,68 @@
+class Solution {
+public:
+    vector<vector<string>> findLadders(string beginWord, string endWord,            vector<string>& wordList) {
+        int exit=1;
+        for(int i=0;i<wordList.size();++i)
+        {
+            if(endWord==wordList[i])
+            {
+                exit=0;
+                break;
+            }    
+        }
+        if(exit) return {};
+        unordered_set<string> dict;
+        dict.insert(wordList.begin(),wordList.end());
+        dict.insert(endWord);
+        queue<vector<string>> paths;
+        vector<vector<string>> res;
+        paths.push({beginWord});
+        int level=1;
+        int minLevel=INT_MAX;
+        unordered_set<string> visited;
+        while(!paths.empty())
+        {
+            vector<string> path=paths.front();
+            paths.pop();
+            if(path.size()>level)
+            {
+                for(string word:visited)
+                    dict.erase(word);
+                visited.clear();
+                if(path.size()>minLevel)
+                {
+                    break;
+                }
+                else
+                {
+                    level=path.size();
+                }
+            }
+            string last=path.back();
+            for(int i=0;i<last.size();++i)
+            {
+                string flag=last;
+                for(int j=0;j<26;++j)
+                {
+                    flag[i]=j+'a';
+                    if(dict.find(flag)!=dict.end())
+                    {
+                        vector<string> newpath=path;
+                        newpath.push_back(flag);
+                        visited.insert(flag);
+                        if(flag==endWord)
+                        {
+                            minLevel=level;
+                            res.push_back(newpath);
+                        }
+                        else
+                        {
+                            paths.push(newpath);
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
