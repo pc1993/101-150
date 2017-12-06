@@ -35,7 +35,7 @@ public:
                 }
                 else
                 {
-                    level=path.size();
+                    level=path.size();             //更新
                 }
             }
             string last=path.back();
@@ -52,7 +52,7 @@ public:
                         visited.insert(flag);
                         if(flag==endWord)
                         {
-                            minLevel=level;
+                            minLevel=level;         //如果是newpath.size()，那么将进行多余的运算。
                             res.push_back(newpath);
                         }
                         else
