@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int minCut(string s) {
+        int n=s.size();
+        if(n<=1)
+            return 0;
+        int minCuts[n+1];
+        for(int i=0;i<=n;++i)
+            minCuts[i]=i-1;
+        for(int i=1;i<n;++i)
+        {
+            for(int j=0;(i+j)<n&&(i-j)>=0&&s[i-j]==s[i+j];++j)
+            {
+                minCuts[i+j+1]=min(minCuts[i+j+1],1+minCuts[i-j]);
+            }
+            for(int j=0;(i+j)<n&&(i-j-1)>=0&&s[i-j-1]==s[i+j];++j)
+            {
+                minCuts[i+j+1]=min(minCuts[i+j+1],1+minCuts[i-j-1]);
+            }
+        }
+        return minCuts[n];
+    }
+};
