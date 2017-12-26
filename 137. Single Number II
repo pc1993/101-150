@@ -1,1 +1,63 @@
+输入是int型数组，所以可以用32位来表达输入数组的元素。
+假设输入中没有single number，那么输入中的每个数字都重复出现了数字，也就是说，对这32位中的每一位i而言，所有的输入加起来之后，第i位一定是3的倍数
 
+
+
+我们使用三个变量one、two、three来存储每一个位上出现的1、2、3次的情况（其实是模拟了3进制的概念），
+拿第一位思考（特别注意one、two、three的每一位，都表示当前位出现了1次
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int n=nums.size();
+        int one=0;
+        int two=0;
+        int three=0;
+        for(int i=0;i<n;++i)
+        {
+            two |= one & nums[i];
+            one ^= nums[i];
+            three = one & two;
+            one = one ^ three;
+            two = two ^ three;
+        }
+        return one;
+    }
+};
+
+
+
+What we need to do is to store the number of '1's of every bit.
+Since each of the 32 bits follow the same rules, we just need to consider 1 bit. 
+We know a number appears 3 times at most, so we need 2 bits to store that. 
+Now we have 4 state, 00, 01, 10 and 11, but we only need 3 of them.
+In this solution, 00, 01 and 10 are chosen. Let 'ones' represents the first bit, 'twos' represents the second bit.
+Then we need to set rules for 'ones' and 'twos' so that they act as we hopes. 
+The complete loop is 00->10->01->00(0->1->2->3/0).
+For 'ones', we can get 'ones = ones ^ A[i]; if (twos == 1) then ones = 0', 
+that can be tansformed to 'ones = (ones ^ A[i]) & ~twos'.
+Similarly, for 'twos', we can get 'twos = twos ^ A[i]; 
+if (ones* == 1) then twos = 0' and 'twos = (twos ^ A[i]) & ~ones'. 
+Notice that 'ones*' is the value of 'ones' after calculation, that is why twos iscalculated later.
+Here is another example. If a number appears 5 times at most, we can write a program using the same method. 
+Now we need 3 bits and the loop is 000->100->010->110->001. The code looks like this:
+
+int singleNumber(int A[], int n) {
+	int na = 0, nb = 0, nc = 0;
+	for(int i = 0; i < n; i++){
+		nb = nb ^ (A[i] & na);
+		na = (na ^ A[i]) & ~nc;
+		nc = nc ^ (A[i] & ~na & ~nb);
+	}
+	return na & ~nb & ~nc;
+}
+Or even like this:
+
+int singleNumber(int A[], int n) {
+	int twos = 0xffffffff, threes = 0xffffffff, ones = 0;
+	for(int i = 0; i < n; i++){
+		threes = threes ^ (A[i] & twos);
+		twos = (twos ^ A[i]) & ~ones;
+		ones = ones ^ (A[i] & ~twos & ~threes);
+	}
+	return ones;
+}
