@@ -22,3 +22,36 @@ So, when the slow pointer and the fast pointer encounter in the cycle,
 we can define a pointer “entry” that point to the head, this “entry” pointer moves
 one step each time so as the slow pointer. When this “entry” pointer and the slow pointer both point to the same location,
 this location is the node where the cycle begins.
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if(head==NULL||head->next==NULL)
+            return NULL;
+        ListNode* fast=head;
+        ListNode* slow=head;
+        ListNode* entry=head;
+        while(fast->next!=NULL&&fast->next->next!=NULL)
+        {
+            fast=fast->next->next;
+            slow=slow->next;
+            if(fast==slow)
+            {
+                while(slow!=entry)
+                {
+                    slow=slow->next;
+                    entry=entry->next;
+                }
+                return entry;
+            }
+        }
+        return NULL;
+    }
+};
