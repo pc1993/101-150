@@ -1,0 +1,59 @@
+make_pair(a,b) key and value
+pair<type A,type B>
+/**
+ * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * };
+ */
+class Solution {
+public:
+    int maxPoints(vector<Point>& points) {
+        int n=points.size();
+        if(n<2)
+            return n;
+        int res=0;
+        for(int i=0;i<n;++i)
+        {
+            map<pair<int,int>,int> lines;
+            int overlop=0;
+            int vertical=0;
+            int localmax=0;
+            for(int j=i+1;j<n;++j)
+            {
+                if(points[i].x==points[j].x&&points[i].y==points[j].y)
+                {
+                    overlop++;
+                }
+                else if(points[i].x==points[j].x)
+                {
+                    vertical++;
+                }
+                else
+                {
+                    int a=points[j].x-points[i].x;
+                    int b=points[j].y-points[i].y;
+                    int k=gcd(a,b);
+                    a=a/k;
+                    b=b/k;
+                    lines[make_pair(a,b)]++;
+                    localmax=max(localmax,lines[make_pair(a,b)]);
+                }
+                localmax=max(localmax,vertical);
+            }
+            res=max(res,localmax+overlop+1);
+        }
+        return res;
+    }
+private:
+    int gcd(int a,int b)
+    {
+        if(b==0)
+            return a;
+        else
+            return gcd(b,a%b);
+    }
+};
