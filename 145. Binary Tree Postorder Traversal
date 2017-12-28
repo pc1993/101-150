@@ -1,0 +1,55 @@
+vector<int> postorderTraversal(TreeNode* root) {
+    vector<int> nodes;
+    stack<TreeNode*> toVisit;
+    TreeNode* curNode = root;
+    TreeNode* lastNode = NULL;
+    while (curNode || !toVisit.empty()) {
+        if (curNode) {
+            toVisit.push(curNode);
+            curNode = curNode -> left;
+        }
+        else {
+            TreeNode* topNode = toVisit.top();
+            if (topNode -> right && lastNode != topNode -> right)  ／／防止右节点无限循环
+                curNode = topNode -> right;
+            else {
+                nodes.push_back(topNode -> val);
+                lastNode = topNode;
+                toVisit.pop();
+            }
+        }
+    }
+    return nodes;
+}
+取巧解法
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        if(root==NULL)
+            return {};
+        vector<int> res;
+        stack<TreeNode*> visited;
+        visited.push(root);
+        while(!visited.empty())
+        {
+            TreeNode *visiting=visited.top();
+            visited.pop();
+            res.push_back(visiting->val);
+            if(visiting->left!=NULL)
+                visited.push(visiting->left);
+            if(visiting->right!=NULL)
+                visited.push(visiting->right);
+        }
+        reverse(res.begin(),res.end());
+        return res;
+    }
+};
