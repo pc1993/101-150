@@ -1,0 +1,32 @@
+stack先进后出
+queue先进先出
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        if(root==NULL)
+            return {};
+        vector<int> res;
+        stack<TreeNode*> visited;
+        visited.push(root);
+        while(!visited.empty())
+        {
+            TreeNode *visiting=visited.top();
+            res.push_back(visiting->val);
+            visited.pop();
+            if(visiting->right!=NULL)
+                visited.push(visiting->right);
+            if(visiting->left!=NULL)
+                visited.push(visiting->left);
+        }
+        return res;
+    }
+};
