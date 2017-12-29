@@ -1,0 +1,38 @@
+1.==是判断两个变量或实例是不是指向同一个内存空间    equals是判断两个变量或实例所指向的内存空间的值是不是相同 
+2.==是指对内存地址进行比较    equals()是对字符串的内容进行比较
+3.==指引用是否相同    equals()指的是值是否相同
+== 判断变量 int float ...
+equals（）对象，比如string
+
+map
+使用count，返回的是被查找元素的个数。如果有，返回1；否则，返回0。注意，map中不存在相同元素，所以返回值只能是1或0。
+使用find，返回的是被查找元素的位置，没有则返回map.end()
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        unordered_map<string,function<int(int,int)>> mp=
+        {
+            {"+",[](int a,int b){return a+b;}},
+            {"-",[](int a,int b){return a-b;}},
+            {"*",[](int a,int b){return a*b;}},
+            {"/",[](int a,int b){return a/b;}}
+        };
+        stack<int> mstay;
+        for(auto s:tokens)
+        {
+            if(!mp.count(s))
+            {
+                mstay.push(stoi(s));
+            }
+            else
+            {
+                int b=mstay.top();
+                mstay.pop();
+                int a=mstay.top();
+                mstay.pop();
+                mstay.push(mp[s](a,b));
+            }
+        }
+        return mstay.top();
+    }
+};
