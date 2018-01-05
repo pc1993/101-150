@@ -61,3 +61,4 @@ int singleNumber(int A[], int n) {
 	}
 	return ones;
 }
+https://leetcode.com/problems/single-number-ii/discuss/43417
